@@ -39,7 +39,7 @@ client.on('messageCreate', async message => {
     const serverQueue = serverQueues.get(message.guild.id);
 
     // 1. Lệnh phát nhạc: !play <link_youtube>
-    if (command === '!nhac') {
+    if (command === '!play') {
         const voiceChannel = message.member?.voice.channel;
         if (!voiceChannel) return message.reply('❌ Bạn cần vào một kênh thoại trước!');
 
