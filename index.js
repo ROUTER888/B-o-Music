@@ -32,19 +32,19 @@ client.once('clientReady', () => {
 
 client.on('messageCreate', async message => {
     if (message.author.bot) return;
-    if (!message.content.startsWith('#')) return;
+    if (!message.content.startsWith('!')) return;
 
     const args = message.content.split(' ');
     const command = args[0].toLowerCase();
     const serverQueue = serverQueues.get(message.guild.id);
 
-    // 1. Lệnh phát nhạc: #play <link_youtube>
-    if (command === '#play') {
+    // 1. Lệnh phát nhạc: !play <link_youtube>
+    if (command === '!nhac') {
         const voiceChannel = message.member?.voice.channel;
         if (!voiceChannel) return message.reply('❌ Bạn cần vào một kênh thoại trước!');
 
         const url = args[1];
-        if (!url) return message.reply('❌ Vui lòng dán link YouTube theo cú pháp: `#play <link>`');
+        if (!url) return message.reply('❌ Vui lòng dán link YouTube theo cú pháp: `!play <link>`');
 
         const permissions = voiceChannel.permissionsFor(message.client.user);
         if (!permissions.has(GatewayIntentBits.GuildVoiceStates) && !permissions.has(GatewayIntentBits.ViewChannel)) {
@@ -102,8 +102,8 @@ client.on('messageCreate', async message => {
         }
     }
 
-    // 2. Lệnh bỏ qua bài hát: #skip
-    else if (command === '#skip') {
+    // 2. Lệnh bỏ qua bài hát: !skip
+    else if (command === '!skip') {
         if (!serverQueue) return message.reply('❌ Không có bài hát nào đang phát để skip!');
         if (!message.member.voice.channel) return message.reply('❌ Bạn cần ở trong cùng kênh thoại với bot!');
         
@@ -111,27 +111,27 @@ client.on('messageCreate', async message => {
         message.reply('⏭️ Đã bỏ qua bài hát hiện tại.');
     }
 
-    // 3. Lệnh tạm dừng / tiếp tục: #pause / #resume
-    else if (command === '#pause') {
+    // 3. Lệnh tạm dừng / tiếp tục: !pause / !resume
+    else if (command === '!pause') {
         if (!serverQueue) return message.reply('❌ Không có nhạc đang phát!');
         serverQueue.player.pause();
         message.reply('⏸️ Đã tạm dừng phát nhạc.');
     } 
-    else if (command === '#resume') {
+    else if (command === '!resume') {
         if (!serverQueue) return message.reply('❌ Không có nhạc đang phát!');
         serverQueue.player.unpause();
         message.reply('▶️ Tiếp tục phát nhạc!');
     }
 
-    // 4. Lệnh lặp lại bài hát hiện tại: #loop
-    else if (command === '#loop') {
+    // 4. Lệnh lặp lại bài hát hiện tại: !loop
+    else if (command === '!loop') {
         if (!serverQueue) return message.reply('❌ Bot chưa tham gia phát nhạc!');
         serverQueue.loop = !serverQueue.loop;
         message.reply(`🔂 Chế độ lặp lại (Loop): **${serverQueue.loop ? 'BẬT' : 'TẮT'}**`);
     }
 
-    // 5. Lệnh dừng hẳn và thoát phòng: #stop / #out
-    else if (command === '#stop' || command === '#out') {
+    // 5. Lệnh dừng hẳn và thoát phòng: !stop / !out
+    else if (command === '!stop' || command === '!out') {
         if (!serverQueue) {
             const connection = getVoiceConnection(message.guild.id);
             if (connection) connection.destroy();
